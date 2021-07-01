@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import { Modal, Form, Input, Button, Checkbox, message } from 'antd';
-import axios from 'axios'
+import { Modal, Form, Input, Button, Checkbox } from 'antd';
+
 import {withRouter} from 'react-router-dom'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
  class NormalLoginForm extends Component {
 
     state={
-        username:'',
-        password:'',
+        username: '',
+        password: '',
         isShow : false,
     }
 
@@ -42,23 +42,11 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
     }
     
 
-    //表单提交回调
+    //表单提交触发回调将表单值传给父组件login
     onFinish = (values) => {
         console.log('Received values of form: ', values);
         //console.log('woshi:'+ values.username)
-        const {username,password} = values
-        axios.post(`/login`,{username,password}).then(res=>{
-            if(res.data.status === 0){
-                console.log(res.status)
-                message.success('登陆成功！')
-                this.props.history.replace('/')       
-            }else {
-                message.error(res.data.msg)
-            }
-        }).catch(err=>{
-            console.log(err)
-        })
-
+        this.props.getUsers(values)     
     }
     render() {
         const {username,password,isShow} = this.state
@@ -67,10 +55,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
                 {
                     isShow === true?  
                     (<Modal title="忘记密码？" visible={isShow} onOk={this.handleOk} onCancel={this.handleCancel}>
-                        <p>请联系管理员重置账号密码。</p>
-                
-                    </Modal>):null
-                
+                        <p>请联系管理员重置账号密码。</p>                
+                    </Modal>):null               
                 }
                  <Form
                     name="normal_login"

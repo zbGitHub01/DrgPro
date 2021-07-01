@@ -1,6 +1,6 @@
-import {Switch,Route} from 'react-router-dom'
+import {Switch,Route,Redirect} from 'react-router-dom'
 import Login from './pages/login';
-import Home from './pages/navbar'
+import Home from './component/home'
 
 
 function App() {
@@ -8,7 +8,8 @@ function App() {
     <div className="App" style={{height:'100%'}}>   
       <Switch>
           <Route path='/login' component={Login}></Route>
-          <Route path='/' component={Home}></Route>
+          <Route path='/home' component={Home}></Route>
+          <Redirect to='/home'/>
       </Switch>
     </div>
   );
