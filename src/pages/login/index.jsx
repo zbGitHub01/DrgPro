@@ -40,7 +40,7 @@ export default class Login extends Component {
             <div className='loginPage'>
                 <header className='login-nav'>
                     <img src={Logo} alt='Logo'></img>
-                    <h1>测试平台</h1>
+                    <h1>DRG分组器规则维护测试平台</h1>
                 </header>
                 <section className='login-content'>
                     <h2>登陆</h2>
