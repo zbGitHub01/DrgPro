@@ -28,7 +28,7 @@ export default class Home extends Component {
     }
 
     
-    //忘记密码 （ok）点击事件回调
+    // （ok）点击事件回调
     handleOk = () =>{
         this.setState({
             isShow : false
@@ -36,12 +36,13 @@ export default class Home extends Component {
         window.localStorage.clear()
     }
 
-    //忘记密码 （取消）点击事件回调
+    // （取消）点击事件回调
     handleCancel = () =>{
         this.setState({
             isShow : false
         }) 
     }
+
 
      render() {
          //如果localStorage中没有登陆数据 则重定向回登陆界面
