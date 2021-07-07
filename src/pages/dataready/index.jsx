@@ -116,7 +116,7 @@ export default class DataReady extends Component {
         const {isSucceed,percent} = this.state
         if (isSucceed === 1) {
             return (<span className='succProgress-num'>{percent+'%'}</span>)
-       } else if (isSucceed === 2) {
+       } else if (isSucceed === 2 || isSucceed === 3) {
             return (<span className='succProgress-num' style={{cursor:'pointer'}} onClick={this.handleUploadAgain}>重新上传</span>)
        } else {
            return (<span className='succProgress-num' style={{cursor:'pointer',color:'red'}} onClick={this.handleDelete}>删除</span>)
@@ -170,19 +170,19 @@ export default class DataReady extends Component {
         })
     }
 
-    // componentDidMount(){
-    //     this.getUpload()
-    // }
+    componentDidMount(){
+        this.getUpload()
+    }
 
     render() {
             const {...pro} = this.getUpload()
             const { isShowProgress,processWidth,fileName,isShowDelete,isSucceed } = this.state
         return (
-            <div style={{width:'70%',height:'579.39px',margin:'auto',marginTop:'120px'}}>
+            <div style={{width:'70%',height:'579.39px',margin:'auto',paddingTop:'120px'}}>
                 {
                     isShowProgress === false ? (
                         <Dragger {...pro} >
-                            <p className="ant-upload-drag-icon" style={{ height:'60px',margin:0}} >
+                            <p className="ant-upload-drag-icon" style={{ height:'60px'}} >
                             <CloudUploadOutlined style={{fontSize:'60px',color:'#3569d6'}}/>
                             </p>
                             <br/>

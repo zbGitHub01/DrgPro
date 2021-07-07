@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {Route,Switch,Redirect} from 'react-router-dom'
 import { Modal } from 'antd';
 import {UserOutlined,EllipsisOutlined,AlertOutlined } from '@ant-design/icons'
-import Analysis from '../../pages/analysis'
+import {Analysis} from '../../pages/analysis'
 import Dataready from '../../pages/dataready'
 import Rolemanage from '../../pages/rolemanage'
 import MyNavLink from '../mynavlink'
@@ -56,6 +56,11 @@ export default class Home extends Component {
             <header className='home-nav'>
                 <img src={Logo} alt='Logo'></img>
                 <h1>DRG分组器维护测试平台</h1>
+                {/* <div className='home-content'>
+                    <span className='home-content-child'><MyNavLink to='/home/dataready'>数据准备</MyNavLink> </span>
+                    <span className='home-content-child'><MyNavLink to='/home/analysis'>分组分析</MyNavLink> </span>
+                    <span className='home-content-child'><MyNavLink to='/home/rolemanage'>规则管理</MyNavLink> </span>
+                </div> */}
                 <ul className='home-content'> 
                      {
                        navShowArray.map((navObj)=>{

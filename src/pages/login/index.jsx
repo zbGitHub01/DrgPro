@@ -30,6 +30,7 @@ export default class Login extends Component {
             console.log(err)
         })
     }
+
   
     render() {
         //如果localStorage中有数据 则跳转至主页
@@ -52,42 +53,3 @@ export default class Login extends Component {
         )
     }
 }
-
-// const NormalLoginForm = () => {
-     
-//     const [form] = Form.useForm()
-//     // const [value,setUser] = React.useState({}); 
-//     const usernameRef = React.useRef()
-//     const passwordRef = React.useRef()
-    
-  
-   
-
-    // const a = form.getFieldValue('username')
-
-      
-      // setUser({
-      //     value: values
-      // })
-     
-
-    
-
-   
-  
-    // const [user,setUser] = React.useState({username: '',password:''});
-    // const uname = usernameRef.current.getFieldsValue()  
-    // const upass = passwordRef.current.getFieldsValue()  
-    // setUser({
-    //      username: uname,
-    //      password: upass
-    //      })
-    //     console.log(user)
-    // handleChange = (e)=>{       
-    //     const [user,setUser] = React.UseState({username: '',password:''}); 
-    //     setUser({
-    //         [e.target.name]:e.target.value
-    //     })
-    //    console.log(user)
-    // }
-
