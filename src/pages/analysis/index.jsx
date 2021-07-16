@@ -1,118 +1,157 @@
-import React, { useState,Component } from 'react';
-import { Table, Radio, Divider } from 'antd';
-import {Link} from 'react-router-dom'
+import React, { Component } from 'react';
+import { Table, Select, Button, Input, Spin } from 'antd';
+import { PauseOutlined } from '@ant-design/icons'
+// import {Link} from 'react-router-dom'   
+import  { queryAllInfoAxios,queryByPid,queryByDiagName,queryBySurgName } from '../../axios'
+import columns from '../../config/menuTable'
 import './index.less'
 
-export  const Analysis =()=> {
 
-    
-    const columns = [
-        {
-          title: 'Name',
-          dataIndex: 'name',
-          render: (text) => <Link>{text}</Link>,
-        },
-        {
-          title: 'Age',
-          dataIndex: 'age',
-        },
-        {
-          title: 'Address',
-          dataIndex: 'address',
-        },
-      ];
-      const data = [
-        {
-          key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park',
-        },
-        {
-          key: '4',
-          name: 'Disabled User',
-          age: 99,
-          address: 'Sidney No. 1 Lake Park',
-        },
-        {
-            key: '5',
-            name: 'Disabled User',
-            age: 99,
-            address: 'Sidney No. 1 Lake Park',
-          },
-          {
-            key: '6',
-            name: 'Disabled User',
-            age: 99,
-            address: 'Sidney No. 1 Lake Park',
-          },
-          {
-            key: '7',
-            name: 'Disabled User',
-            age: 99,
-            address: 'Sidney No. 1 Lake Park',
-          },
-      ]; // rowSelection object indicates the need for row selection
+const {Option} = Select
+export default class Analysis extends Component {
+
+    state = {
+      datas: [],
+      isLoading: true,
+      columns: [],
+      selectValue: 'diag_name',
+      inputValue: '',
+      id:[]
+    }
+
+    //初始化列表
+    initColumns = () => {
+      this.setState({
+        columns
+      })
+    }
+
+    //获取后台数据
+    getAllDatas = () => {
+        this.set = setTimeout(async() => {
+          await queryAllInfoAxios().then(res =>{
+          const list = res.data
+          // console.log(JSON.stringify(columns.data.result).pid)
+          //获取列表数据key(id)
+          const id = this.state.datas.map(item => item.pid)
+          if(res.data.status === 0){
+            this.setState( state => {             
+                return {
+                  isLoading:false,
+                  datas: list.data.result,
+                  id
+                }
+            })
+          }
+        })
+      }, 900)      
+    }
+
+    //获取选择搜索框关键字
+    handleChange = (selectValue) =>{
+      this.setState({selectValue},()=>{
+        console.log(selectValue)
+      })
       
-      const rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-          console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: (record) => ({
-          disabled: record.name === 'Disabled User',
-          // Column configuration not to be checked
-          name: record.name,
-        }),
-      };
+    }
 
-  
- 
-        const [selectionType, setSelectionType] = useState('checkbox');
+    //输入框获取值
+    handleInput=(e)=>{
+      const inputValue = e.target.value
+      this.setState({
+        inputValue
+      })
+    }
+
+    //搜索按钮触发得查询
+    searchClick = () => {
+      const {selectValue,inputValue} = this.state
+      // console.log(selectValue,inputValue)
+      switch(selectValue) {
+        case 'pid' :
+            queryByPid({'pid':inputValue}).then(res=>{
+                const data = res.data
+                console.log(data)
+                return data
+            })
+        break;
+        case 'diag_name' :
+            queryByDiagName({'diag_name':inputValue}).then(res=>{
+                const data = res.data
+                console.log(data)
+                return data
+            })
+        break;
+        case 'surg_name' :
+            queryBySurgName({'surg_name':inputValue}).then(res=>{
+                const data = res.data
+                console.log(data)
+                return data
+            })
+        break;
+        default:
+          break
+      }
+      // const data = querySwitch(selectValue,inputValue)
+      // console.log(data)
+    }
+
+    //发送axios查询 及 初始化列表数据
+    componentDidMount() {
+      this.initColumns()
+      this.getAllDatas()
+    }
+
+    //清除定时函数
+    componentWillUnmount(){
+      clearTimeout(this.set)
+    }
+
+  render() {
+    const {datas,isLoading,columns,id} = this.state
         return (
             <section className='section-role'>
                 <div className='section-role-sider'>
-                    <h4>Middle size table</h4>
-                    <Table columns={columns} dataSource={data} size="middle" />
-                    <h4>Small size table</h4>
-                    <Table columns={columns} dataSource={data} size="small" />
+                  fffsssssssdd
                 </div>
-                <div className='section-role-content'>
-                <div>
-                    <Radio.Group
-                        onChange={({ target: { value } }) => {
-                        setSelectionType(value);
-                        }}
-                        value={selectionType}
-                    >
-                        <Radio value="checkbox">Checkbox</Radio>
-                        <Radio value="radio">radio</Radio>
-                    </Radio.Group>
-
-                    <Divider />
-
-                    <Table
-                        rowSelection={{
-                        type: selectionType,
-                        ...rowSelection,
-                        }}
-                        columns={columns}
-                        dataSource={data}
-                    />
+                <div className='section-role-content' >      
+                  <>
+                    <div className='section-role-content-header'>
+                      <h1>筛选</h1>
+                      <Select defaultValue="diag_name" style={{ width: 178,marginTop:'7px'}} onChange={this.handleChange}>
+                        <Option value="pid"> 编号(pid)</Option>
+                        <Option value="diag_name">分组名称(diag_name)</Option>
+                        <Option value="surg_name">手术名称(surg_name)</Option>
+                      </Select>&nbsp;&nbsp;
+                      {/* <Dropdown  overlay={menu} placement="bottomLeft" trigger='click'>
+                        <Button style={{marginTop:'7px',width:'130px'}}>
+                          d
+                          <DownOutlined />
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </Button>
+                      </Dropdown>&nbsp; */}
+                      <PauseOutlined rotate={90} style={{marginTop:'15px'}} />&nbsp;&nbsp;
+                      <Input onChange={this.handleInput} className='section-role-content-header-input' placeholder="填写关键字" name='screenValue'/>
+                      <Button className='section-role-content-header-button'>重置</Button>&nbsp;&nbsp;&nbsp;
+                      <Button onClick={this.searchClick} style={{marginTop:'7px'}} type="primary">搜索</Button>
                     </div>
-                </div>
+                    <hr/>
+                    <div className='section-role-content-headerBottom'>
+                      &nbsp;&nbsp;&nbsp;<p style={{width:'15%',marginTop:'5px'}}>符合条件有xxx条数据</p>
+                      <Button className='headerBottomButton' type='primary' >保存</Button>
+                    </div>
+                  </>
+                  {
+                    isLoading === true?<Spin tip="疯狂Loading中......" size="large" className='spin'></Spin>:
+                    <Table rowKey='pid' 
+                      columns={columns} 
+                      dataSource={datas} 
+                      scroll={{ x: 1000 }}
+                      // rowSelection={{selectedRowKeys:[id],type: 'radio'}}
+                    />
+                  }                   
+           </div>
             </section>
-        )
+        )}
     
 }

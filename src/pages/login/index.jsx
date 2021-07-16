@@ -12,7 +12,7 @@ export default class Login extends Component {
     getUsers = (values)=>{
         let localStorage = window.localStorage
         const {username,password} = values
-        loginAxios(`/login`,{username,password}).then(res=>{
+        loginAxios(values).then(res=>{
             if(res.data.status === 0){
                 console.log(res.status)
                 message.success('登陆成功')               
@@ -25,6 +25,7 @@ export default class Login extends Component {
                 //window.location.href = "/home"; 
             }else {
                 message.error(res.data.msg)
+                console.log(res.data)
             }
         }).catch(err=>{
             console.log(err)

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {Route,Switch,Redirect} from 'react-router-dom'
 import { Modal } from 'antd';
 import {UserOutlined,EllipsisOutlined,AlertOutlined } from '@ant-design/icons'
-import {Analysis} from '../../pages/analysis'
+import Analysis from '../../pages/analysis'
 import Dataready from '../../pages/dataready'
 import Rolemanage from '../../pages/rolemanage'
 import MyNavLink from '../mynavlink'
@@ -26,8 +26,7 @@ export default class Home extends Component {
             isShow: true
         })
     }
-
-    
+   
     // （ok）点击事件回调
     handleOk = () =>{
         this.setState({
@@ -42,7 +41,6 @@ export default class Home extends Component {
             isShow : false
         }) 
     }
-
 
      render() {
          //如果localStorage中没有登陆数据 则重定向回登陆界面
