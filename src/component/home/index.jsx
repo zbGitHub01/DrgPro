@@ -61,7 +61,7 @@ export default class Home extends Component {
                 </div> */}
                 <ul className='home-content'> 
                      {
-                       navShowArray.map((navObj)=>{
+                       navShowArray.map(navObj => {
                            return (
                                 <li key={navObj.id} className='home-content-child' >
                                     <MyNavLink to={`/home/${navObj.ename}`}>{navObj.title}</MyNavLink>

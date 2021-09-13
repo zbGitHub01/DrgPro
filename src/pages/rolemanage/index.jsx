@@ -1,31 +1,36 @@
 import React, { Component } from 'react'
 import EditableTable from '../analysis/EditableTable'
-import  { queryAllInfoAxios } from '../../axios'
+import  { queryAllInfoAxios } from '../../api'
+// import StringBuffer from '../../config/stringbuffer'
 import './index.less'
 
 export default class RoleManage extends Component{
 
     state={
-        originDatas: []
+        originDatas: [],
+        da: []
     }
 
-    queryDatas=()=>{
-        queryAllInfoAxios().then( async res => {
-            const originDatas =  await res.data.data
+    queryDatas= async()=>{
+        let resultAllInfo = await queryAllInfoAxios()
+        // queryAllInfoAxios().then( async res => {
+            const originDatas =  await resultAllInfo.data
             this.setState({originDatas})
-        })
+        // })
     }
+   
+   
 
     componentDidMount(){
         this.queryDatas()
     }
    
     render() {
-        const {originDatas} = this.state
+        const {originDatas,da} = this.state
         return (
             <section className='section-role'>
                 <div className='section-role-sider'>
-                    co
+                    <span>{da}</span>
                 </div>
                 <div className='section-role-content'>
                     {

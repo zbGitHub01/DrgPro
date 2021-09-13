@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Select, Button, Input, Spin ,message } from 'antd';
-import { PauseOutlined } from '@ant-design/icons' 
-import  { queryAllInfoAxios,queryByVarParam,updateByParam } from '../../axios'
+import { PauseOutlined, DownloadOutlined } from '@ant-design/icons' 
+import  { queryAllInfoAxios,queryByVarParam,updateByParam } from '../../api'
 // import EditableTable from '../../config/menuTable'
 import EditableTable from './EditableTable';
 import './index.less'
@@ -12,6 +12,7 @@ export default class Analysis extends Component {
 
     state = {
       datas: [], //数据源
+      rulesData:[],
       isLoading: true, //加载图标显示
       selectValue: 'diag_name',
       inputValue: '',
@@ -30,24 +31,27 @@ export default class Analysis extends Component {
     //获取后台数据
     getAllDatas = () => {
         this.set = setTimeout( async() => {
-          await queryAllInfoAxios().then(res =>{
-          const list = res.data
+
+          let resultAllInfo = await queryAllInfoAxios()
+          // await queryAllInfoAxios().then(res =>{
+          // const list = res.data
           // console.log(JSON.stringify(columns.data.result).pid)
           //获取列表数据key(id)
           const id = this.state.datas.map(item => item.pid)
-          if(res.data.status === 0){
+          if(resultAllInfo.status === 0){
             // console.log(res.data.data.length)
-            const total = res.data.data.length
+            const total = resultAllInfo.data.length
             this.setState( state => {             
                 return {
                   isLoading:false,
-                  datas: list.data,
+                  datas: resultAllInfo.data,
+                  rulesData: resultAllInfo.rules,
                   total,
                   id
                 }
             })
           }
-        })
+        // })
       }, 900)      
     }
 
@@ -55,6 +59,7 @@ export default class Analysis extends Component {
     handleChange = (selectValue) =>{
       this.setState({selectValue},()=>{
         // console.log(selectValue)
+        console.log(this.state.rulesData)
       })
       
     }
@@ -71,45 +76,48 @@ export default class Analysis extends Component {
     searchClick = () => {
       const {selectValue,inputValue} = this.state
       this.setState(state=>({isLoading:true,datas:[],total:0}))
-      setTimeout(()=>{
-        queryByVarParam(selectValue,inputValue).then(res=>{
-          if(res.data.status === 200) {
+      setTimeout( async()=>{
+        let queryInfo = await queryByVarParam(selectValue,inputValue)
+        // queryByVarParam(selectValue,inputValue).then(res=>{
+          if(queryInfo.status === 200) {
             this.setState(state => {
               return  { 
                 isLoading: false,
-                datas: res.data.data,
-                total: res.data.data.length
+                datas: queryInfo.data,
+                total: queryInfo.data.length
               }
             })
           }
-        })
+        // })
       },800)
     }
 
     //重置按钮
-    resetClick=()=>{     
-      queryAllInfoAxios().then( res =>{
-        const list = res.data
-        const total = res.data.data.length
+    resetClick= async()=>{  
+      let resultAllInfo = await queryAllInfoAxios()   
+      // queryAllInfoAxios().then( res =>{
+        // const list = res.data
+        const total = resultAllInfo.data.length
         this.setState( state => {             
             return {
-              datas: list.data,
+              datas: resultAllInfo.data,
               inputValue: '',
               total,
             }
         })  
         document.getElementById('inp').value = '';
-    })  
+    // })  
     }
 
     //获取子组件表单值并更改数据
-    getFormFields = (row) => {
-        updateByParam(row).then(async res=>{
-          if(await res.data.status===0) {
+    getFormFields = async(row) => {
+        let updateInfo = await  updateByParam(row)
+        // updateByParam(row).then(async res=>{
+          if(await updateInfo.status===0) {
             message.success('修改成功')
             this.getAllDatas()
           }
-        })
+        // })
     }
 
     //数据深对比
@@ -129,11 +137,25 @@ export default class Analysis extends Component {
     }
 
   render() {
-    const {datas,isLoading,total} = this.state
+    const {datas,rulesData,isLoading,total} = this.state
         return (
             <section className='section-role'>
                 <div className='section-role-sider'>
-                  fffsssssssdd
+                  <ul style={{width:'100%',height:'100%',backgroundColor:'#eeeeee'}}>
+                    {
+                      rulesData.map(item=>{
+                        return (
+                          <li key={item.id} className='section-role-sider-li'>
+                            <p className='li-firChild'>
+                              {item.name} 
+                              <DownloadOutlined style={{float:'right',marginRight:'20px',color:'#5681de'}}/>
+                            </p>
+                            <p>{item.value}</p>
+                          </li>
+                        )
+                      })
+                    } 
+                  </ul>
                 </div>
                 <div className='section-role-content' >      
                   <>

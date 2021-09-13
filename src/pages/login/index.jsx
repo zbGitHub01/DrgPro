@@ -2,20 +2,21 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import { message } from 'antd';
 import NormalLoginForm from './login-form'
-import {loginAxios} from '../../axios'
+import {loginAxios} from '../../api'
 import Logo from './logo.png'
 import './login.less'
 
 export default class Login extends Component {
 
     //获取到form子组件的值进行 axios登陆请求
-    getUsers = (values)=>{
+    getUsers = async (values)=>{
         let localStorage = window.localStorage
         const {username,password} = values
-        loginAxios(values).then(res=>{
-            if(res.data.status === 0){
-                console.log(res.status)
-                message.success('登陆成功')               
+
+        let result = await loginAxios(values)
+        console.log(result)
+            if(result.status === 0){
+                message.success('登陆成功',1)               
                 //将用户信息存储在localStorage中
                 localStorage.USERNAME = username
                 localStorage.PASSWORD = password
@@ -23,13 +24,7 @@ export default class Login extends Component {
                 this.props.history.replace('/home')
                 console.log(localStorage.length)
                 //window.location.href = "/home"; 
-            }else {
-                message.error(res.data.msg)
-                console.log(res.data)
             }
-        }).catch(err=>{
-            console.log(err)
-        })
     }
 
   

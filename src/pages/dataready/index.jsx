@@ -26,18 +26,18 @@ export default class DataReady extends Component {
             multiple: true,
             showUploadList: false,
             action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',                     
-            // beforeUpload(info) {               
-            //     const isCSV = info.type === 'application/vnd.ms-excel';
-            //     if (!isCSV) {
-            //         message.error('上传文件的格式必须为csv！')
-            //         return false;
-            //     } 
-            //     // else {
-            //     //     _this.setState({   
-            //     //         isShowProgress : true,                       
-            //     //     })   
-            //     // }
-            // },          
+            beforeUpload(info) {               
+                const isCSV = info.type === 'application/vnd.ms-excel';
+                if (!isCSV) {
+                    message.error('上传文件的格式必须为csv！')
+                    return false;
+                } 
+                // else {
+                //     _this.setState({   
+                //         isShowProgress : true,                       
+                //     })   
+                // }
+            },          
             onChange(info) {
               const { status } = info.file;
               const event = info.event
